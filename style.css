@@ -1,5 +1,10 @@
 :root {
-
+    --main-color: #BCA88E;
+    --bg-color: #E3E8E9;
+    --secondary-color: #9DA993;
+    --tertiary-color: #E4B4B4;
+    --shadow-color: #888888;
+    background-color: var(--bg-color);
 }
 * {
     margin: 0px;
