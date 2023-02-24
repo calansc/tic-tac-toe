@@ -5,9 +5,14 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (name) => {
-  const test = () => console.log("test");
-  return { name, test };
+  const hello = () => console.log("hello");
+  let wins = 0;
+  return { name, hello, wins };
 };
+
+// const player1 = document.querySelector(".player1");
+// const player2 = document.querySelector(".player2 ");
+// player1.addEventListener("click", console.log("test"), false);
 
 const displayController = (() => {
   const gameBoardDiv = document.querySelector(".game-board");
@@ -68,48 +73,67 @@ const gameFlow = (() => {
       gameBoard.array[0] === gameBoard.array[2]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[3] != "A" &&
       gameBoard.array[3] === gameBoard.array[4] &&
       gameBoard.array[3] === gameBoard.array[5]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[6] != "A" &&
       gameBoard.array[6] === gameBoard.array[7] &&
       gameBoard.array[6] === gameBoard.array[8]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[0] != "A" &&
       gameBoard.array[0] === gameBoard.array[3] &&
       gameBoard.array[0] === gameBoard.array[6]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[1] != "A" &&
       gameBoard.array[1] === gameBoard.array[4] &&
       gameBoard.array[1] === gameBoard.array[7]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[2] != "A" &&
       gameBoard.array[2] === gameBoard.array[5] &&
       gameBoard.array[2] === gameBoard.array[8]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[0] != "A" &&
       gameBoard.array[0] === gameBoard.array[4] &&
       gameBoard.array[0] === gameBoard.array[8]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
     } else if (
       gameBoard.array[2] != "A" &&
       gameBoard.array[2] === gameBoard.array[4] &&
       gameBoard.array[2] === gameBoard.array[6]
     ) {
       playerTurn.textContent = "You win!";
+      winClickStop();
+    } else if (gameBoard.array.every(checkArray)) {
+      playerTurn.textContent = "Tie Game!";
+    }
+  };
+  const checkArray = (spot) => {
+    return spot != "A";
+  };
+  const winClickStop = () => {
+    for (let i = 0; i < gameBoard.array.length; i++) {
+      let gameTile = document.getElementById(i);
+      gameTile.removeEventListener("click", displayController.clicker);
     }
   };
   return { turner, winChecker };

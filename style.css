@@ -28,4 +28,15 @@
 }
 .turn {
     text-align: center;
+    padding-top:8px;
+}
+.menu {
+    margin-top:16px;
+    display: grid;
+    gap:8px;
+    justify-content: center;
+    text-align: center;
+}
+.player1, .player2, .reset {
+    padding:4px;
 }
