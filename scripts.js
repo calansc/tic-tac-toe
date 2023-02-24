@@ -1,5 +1,5 @@
 const gameBoard = (() => {
-  let array = ["A", "X", "X", "O", "O", "O", "X", "X", "X"];
+  let array = ["A", "A", "A", "A", "A", "A", "A", "A", "A"];
   const updateArray = (position, xo) => array.splice(position, 1, xo);
   return { array, updateArray };
 })();
@@ -9,10 +9,6 @@ const playerFactory = (name) => {
   return { name, test };
 };
 
-const gameFlow = (() => {
-  console.log("gameFlow");
-})();
-
 const displayController = (() => {
   const gameBoardDiv = document.querySelector(".game-board");
   const populateBoard = () => {
@@ -21,19 +17,48 @@ const displayController = (() => {
       gameBoardDiv.appendChild(div);
       div.classList.add("game-tile");
       div.setAttribute("id", i);
-      let image = document.createElement("img");
-      if (gameBoard.array[i] === "X") {
-        image.src = "x.svg";
-        div.appendChild(image);
-      } else if (gameBoard.array[i] === "O") {
-        image.src = "o.svg";
-        div.appendChild(image);
-      } else {
-        console.log(i);
-      }
+      div.addEventListener("click", clicker);
     }
   };
-  return { populateBoard };
+  const makeMove = (tileId) => {
+    let image = document.createElement("img");
+    if (gameBoard.array[tileId] === "X") {
+      // console.log(tileId + "x");
+      image.src = "x.svg";
+      document.getElementById(tileId).appendChild(image);
+    } else if (gameBoard.array[tileId] === "O") {
+      // console.log(tileId + "o");
+      image.src = "o.svg";
+      document.getElementById(tileId).appendChild(image);
+    } else {
+      // console.log("third else?");
+    }
+  };
+  function clicker() {
+    // console.log(this.id);
+    if (gameBoard.array[this.id] === "A") {
+      gameBoard.updateArray(this.id, gameFlow.turner());
+      console.log(this.id, gameBoard.array);
+      makeMove(this.id);
+      // gameFlow.turner();
+    } else {
+    }
+  }
+  return { populateBoard, makeMove, clicker };
+})();
+
+const gameFlow = (() => {
+  let turn = "O";
+  const turner = () => {
+    if (turn === "X") {
+      turn = "0";
+      return (turn = "O");
+    } else {
+      turn = "X";
+      return (turn = "X");
+    }
+  };
+  return { turn, turner };
 })();
 
 displayController.populateBoard();
