@@ -29,6 +29,14 @@
 .turn {
     text-align: center;
     padding-top:8px;
+    padding-bottom: 8px;
+}
+.wins {
+    display: grid;
+    /* grid-template-columns: auto auto; */
+    justify-content: center;
+    gap: 0px;
+    
 }
 .menu {
     margin-top:16px;
@@ -37,6 +45,6 @@
     justify-content: center;
     text-align: center;
 }
-.player1, .player2, .reset {
+.player1, .player2, .reset, .play-ai {
     padding:4px;
 }

@@ -12,10 +12,15 @@
     <div class="title">Tic. Tac. Toe!</div>
     <div class="game-board"></div>
     <div class="turn">X - Player 1's Turn</div>
-    <div class="menu">Menu
-        <button class="player1">Player 1's Name</button>
-        <button class="player2">Player 2's Name</button>
-        <button class="reset">Reset</button>
+    <div class="wins">
+        <div class="p1wins">Player 1 Wins: 0</div>
+        <div class="p2wins">Player 2 Wins: 0</div>
+    </div>
+    <div class="menu">
+        <!-- <button class="player1">Player 1's Name</button>
+        <button class="player2">Player 2's Name</button> -->
+        <button class="reset" onclick="displayController.reset()">Reset</button>
+        <button class="play-ai" onclick="displayController.reset(), playAi.playAiStart()">Play AI</button>
     </div>
 </body>
     <script src="scripts.js"></script>

@@ -4,19 +4,16 @@ const gameBoard = (() => {
   return { array, updateArray };
 })();
 
-const playerFactory = (name) => {
-  const hello = () => console.log("hello");
-  let wins = 0;
-  return { name, hello, wins };
-};
-
-// const player1 = document.querySelector(".player1");
-// const player2 = document.querySelector(".player2 ");
-// player1.addEventListener("click", console.log("test"), false);
+// const playerFactory = (name) => {
+//   const hello = () => console.log("hello");
+//   let wins = 0;
+//   return { name, hello, wins };
+// };
 
 const displayController = (() => {
   const gameBoardDiv = document.querySelector(".game-board");
   const populateBoard = () => {
+    // gameBoardDiv.replaceChildren();
     for (let i = 0; i < gameBoard.array.length; i++) {
       let div = document.createElement("div");
       gameBoardDiv.appendChild(div);
@@ -39,6 +36,7 @@ const displayController = (() => {
       // console.log("third else?");
     }
   };
+
   function clicker() {
     // console.log(this.id);
     if (gameBoard.array[this.id] === "A") {
@@ -49,19 +47,49 @@ const displayController = (() => {
     } else {
     }
   }
-  return { populateBoard, makeMove, clicker };
+  function clickerAi() {
+    // console.log(this.id);
+    if (gameBoard.array[this.id] === "A") {
+      let turn = gameFlow.turner();
+      console.log(turn);
+      gameBoard.updateArray(this.id, turn);
+      // console.log(this.id, gameBoard.array);
+      makeMove(this.id);
+      gameFlow.winChecker();
+      let wincheck = document.querySelector(".turn");
+      if (turn === "X" && wincheck.textContent.indexOf("win") === -1) {
+        playAi.aiMove();
+      }
+    } else {
+    }
+  }
+  function reset() {
+    for (i = 0; i < gameBoard.array.length; i++) {
+      gameBoard.updateArray(i, "A");
+      let gameTile = document.getElementById(i);
+      gameTile.replaceChildren();
+      gameTile.addEventListener("click", clicker);
+      gameFlow.turner();
+    }
+    gameFlow.turner();
+  }
+  return { populateBoard, makeMove, clicker, reset, clickerAi };
 })();
+this;
 
 const gameFlow = (() => {
-  let turn = "O";
+  let turn = "0";
+  let player;
   const playerTurn = document.querySelector(".turn");
   const turner = () => {
     if (turn === "X") {
       turn = "0";
+      player = "2";
       playerTurn.textContent = "X - Player 1's Turn";
       return (turn = "O");
     } else {
       turn = "X";
+      player = "1";
       playerTurn.textContent = "O - Player 2's Turn";
       return (turn = "X");
     }
@@ -72,57 +100,66 @@ const gameFlow = (() => {
       gameBoard.array[0] === gameBoard.array[1] &&
       gameBoard.array[0] === gameBoard.array[2]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[3] != "A" &&
       gameBoard.array[3] === gameBoard.array[4] &&
       gameBoard.array[3] === gameBoard.array[5]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[6] != "A" &&
       gameBoard.array[6] === gameBoard.array[7] &&
       gameBoard.array[6] === gameBoard.array[8]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[0] != "A" &&
       gameBoard.array[0] === gameBoard.array[3] &&
       gameBoard.array[0] === gameBoard.array[6]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[1] != "A" &&
       gameBoard.array[1] === gameBoard.array[4] &&
       gameBoard.array[1] === gameBoard.array[7]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[2] != "A" &&
       gameBoard.array[2] === gameBoard.array[5] &&
       gameBoard.array[2] === gameBoard.array[8]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (
       gameBoard.array[0] != "A" &&
       gameBoard.array[0] === gameBoard.array[4] &&
       gameBoard.array[0] === gameBoard.array[8]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      playAi.aiMove();
+      winCounter();
     } else if (
       gameBoard.array[2] != "A" &&
       gameBoard.array[2] === gameBoard.array[4] &&
       gameBoard.array[2] === gameBoard.array[6]
     ) {
-      playerTurn.textContent = "You win!";
+      playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
+      winCounter();
     } else if (gameBoard.array.every(checkArray)) {
       playerTurn.textContent = "Tie Game!";
     }
@@ -134,9 +171,57 @@ const gameFlow = (() => {
     for (let i = 0; i < gameBoard.array.length; i++) {
       let gameTile = document.getElementById(i);
       gameTile.removeEventListener("click", displayController.clicker);
+      gameTile.removeEventListener("click", displayController.clickerAi);
     }
   };
-  return { turner, winChecker };
+  let p1 = 0;
+  let p2 = 0;
+  const winCounter = () => {
+    const p1wins = document.querySelector(".p1wins");
+    const p2wins = document.querySelector(".p2wins");
+    if (player === "1") {
+      p1++;
+      console.log(p1);
+    }
+    if (player === "2") {
+      p2 += 1;
+      console.log(p2);
+    }
+    p1wins.textContent = "Player 1 Wins: " + p1;
+    p2wins.textContent = "Player 2 Wins: " + p2;
+  };
+  return { turner, winChecker, turn };
 })();
 
 displayController.populateBoard();
+
+const playAi = (() => {
+  const getRandom = () => {
+    return Math.floor(Math.random() * 9);
+  };
+  function playAiStart() {
+    for (let i = 0; i < gameBoard.array.length; i++) {
+      let gameTile = document.getElementById(i);
+      gameTile.removeEventListener("click", displayController.clicker);
+      gameTile.addEventListener("click", displayController.clickerAi);
+    }
+    let turncheck = document.querySelector(".turn");
+    if (turncheck.textContent.indexOf(1) === -1) {
+      aiMove();
+    }
+    let playAiButton = document.querySelector(".play-ai");
+    playAiButton.textContent = "Reset AI";
+  }
+  const aiMove = () => {
+    let move = getRandom();
+    console.log(move);
+    if (gameBoard.array[move] === "A") {
+      gameBoard.updateArray(move, gameFlow.turner());
+      displayController.makeMove(move);
+      gameFlow.winChecker();
+    } else {
+      aiMove();
+    }
+  };
+  return { getRandom, aiMove, playAiStart };
+})();
