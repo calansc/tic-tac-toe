@@ -227,6 +227,7 @@ const playAi = (() => {
     console.log(move);
     let wincheck = document.querySelector(".turn");
     if (gameBoard.array[move] === "A") {
+      console.log("ai made move" + move);
       gameBoard.updateArray(move, gameFlow.turner());
       displayController.makeMove(move);
       gameFlow.winChecker();
