@@ -78,6 +78,7 @@ const displayController = (() => {
       gameBoard.updateArray(i, "A");
       let gameTile = document.getElementById("tile-" + i);
       gameTile.replaceChildren();
+      gameTile.removeEventListener("click", clickerAi);
       gameTile.addEventListener("click", clicker);
       gameFlow.turner();
     }
@@ -224,7 +225,7 @@ const playAi = (() => {
   const aiMove = () => {
     let move = getRandom();
     console.log(move);
-    let wincheck = document.querySelector(".turn");
+    // let wincheck = document.querySelector(".turn");
     if (gameBoard.array[move] === "A") {
       console.log("ai made move" + move);
       gameBoard.updateArray(move, gameFlow.turner());
