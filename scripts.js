@@ -18,7 +18,7 @@ const displayController = (() => {
       let div = document.createElement("div");
       gameBoardDiv.appendChild(div);
       div.classList.add("game-tile");
-      div.setAttribute("id", i);
+      div.setAttribute("id", "tile-" + i);
       div.addEventListener("click", clicker);
     }
   };
@@ -27,11 +27,11 @@ const displayController = (() => {
     if (gameBoard.array[tileId] === "X") {
       // console.log(tileId + "x");
       image.src = "x.svg";
-      document.getElementById(tileId).appendChild(image);
+      document.getElementById("tile-" + tileId).appendChild(image);
     } else if (gameBoard.array[tileId] === "O") {
       // console.log(tileId + "o");
       image.src = "o.svg";
-      document.getElementById(tileId).appendChild(image);
+      document.getElementById("tile-" + tileId).appendChild(image);
     } else {
       // console.log("third else?");
     }
@@ -39,25 +39,35 @@ const displayController = (() => {
 
   function clicker() {
     // console.log(this.id);
-    if (gameBoard.array[this.id] === "A") {
-      gameBoard.updateArray(this.id, gameFlow.turner());
+    let tile = this.id;
+    tile = tile.slice(5);
+    console.log(tile);
+    if (gameBoard.array[tile] === "A") {
+      gameBoard.updateArray(tile, gameFlow.turner());
       // console.log(this.id, gameBoard.array);
-      makeMove(this.id);
+      makeMove(tile);
       gameFlow.winChecker();
     } else {
     }
   }
   function clickerAi() {
     // console.log(this.id);
-    if (gameBoard.array[this.id] === "A") {
+    let tile = this.id.slice(5);
+    // console.log(tile);
+    if (gameBoard.array[tile] === "A") {
       let turn = gameFlow.turner();
       console.log(turn);
-      gameBoard.updateArray(this.id, turn);
+      gameBoard.updateArray(tile, turn);
       // console.log(this.id, gameBoard.array);
-      makeMove(this.id);
+      makeMove(tile);
       gameFlow.winChecker();
       let wincheck = document.querySelector(".turn");
-      if (turn === "X" && wincheck.textContent.indexOf("win") === -1) {
+      if (
+        turn === "X" &&
+        wincheck.textContent.indexOf("wins") === -1
+        // || (turn === "X" && wincheck.textContent.indexOf("Tie") === -1)
+      ) {
+        console.log("aiturn");
         playAi.aiMove();
       }
     } else {
@@ -66,7 +76,7 @@ const displayController = (() => {
   function reset() {
     for (i = 0; i < gameBoard.array.length; i++) {
       gameBoard.updateArray(i, "A");
-      let gameTile = document.getElementById(i);
+      let gameTile = document.getElementById("tile-" + i);
       gameTile.replaceChildren();
       gameTile.addEventListener("click", clicker);
       gameFlow.turner();
@@ -169,7 +179,7 @@ const gameFlow = (() => {
   };
   const winClickStop = () => {
     for (let i = 0; i < gameBoard.array.length; i++) {
-      let gameTile = document.getElementById(i);
+      let gameTile = document.getElementById("tile-" + i);
       gameTile.removeEventListener("click", displayController.clicker);
       gameTile.removeEventListener("click", displayController.clickerAi);
     }
@@ -181,11 +191,11 @@ const gameFlow = (() => {
     const p2wins = document.querySelector(".p2wins");
     if (player === "1") {
       p1++;
-      console.log(p1);
+      // console.log(p1);
     }
     if (player === "2") {
       p2 += 1;
-      console.log(p2);
+      // console.log(p2);
     }
     p1wins.textContent = "Player 1 Wins: " + p1;
     p2wins.textContent = "Player 2 Wins: " + p2;
@@ -201,7 +211,7 @@ const playAi = (() => {
   };
   function playAiStart() {
     for (let i = 0; i < gameBoard.array.length; i++) {
-      let gameTile = document.getElementById(i);
+      let gameTile = document.getElementById("tile-" + i);
       gameTile.removeEventListener("click", displayController.clicker);
       gameTile.addEventListener("click", displayController.clickerAi);
     }
@@ -210,18 +220,29 @@ const playAi = (() => {
       aiMove();
     }
     let playAiButton = document.querySelector(".play-ai");
-    playAiButton.textContent = "Reset AI";
+    playAiButton.textContent = "Reset Vs AI";
   }
   const aiMove = () => {
     let move = getRandom();
     console.log(move);
+    let wincheck = document.querySelector(".turn");
     if (gameBoard.array[move] === "A") {
       gameBoard.updateArray(move, gameFlow.turner());
       displayController.makeMove(move);
       gameFlow.winChecker();
-    } else {
+    } else if (gameBoard.array.every(checkArray)) {
+      console.log("stop! tie");
+    } else if (gameBoard.array[move] != "A") {
       aiMove();
+    } else {
+      console.log("error!");
     }
+  };
+  const checkArray = (spot) => {
+    return spot != "A";
   };
   return { getRandom, aiMove, playAiStart };
 })();
+
+// wincheck.textContent.indexOf("wins") === -1 ||
+//   wincheck.textContent.indexOf("Tie") === -1;
