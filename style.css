@@ -49,6 +49,9 @@
 .player1, .player2, .reset, .play-ai {
     padding:4px;
 }
+img, .game-tile {
+    transition: all 1s ease-in;
+}
 #tile-0, #tile-1, #tile-2, #tile-3, #tile-4, #tile-5 {
     border-bottom: black solid 2px;
 }

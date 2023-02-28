@@ -160,7 +160,6 @@ const gameFlow = (() => {
     ) {
       playerTurn.textContent = "Player " + player + " wins!";
       winClickStop();
-      playAi.aiMove();
       winCounter();
     } else if (
       gameBoard.array[2] != "A" &&
